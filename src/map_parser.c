@@ -1,4 +1,5 @@
 #include "so_long.h"
+#include <libft.h>
 
 static int	ft_strlen_nl(char *str)
 {
@@ -10,6 +11,7 @@ static int	ft_strlen_nl(char *str)
 	return (i);
 }
 
+/*
 static char	*ft_strjoin_free(char *s1, char *s2)
 {
 	char	*joined;
@@ -30,6 +32,14 @@ static char	*ft_strjoin_free(char *s1, char *s2)
 	joined[i] = '\0';
 	free(s1);
 	return (joined);
+}
+*/
+
+static void	replace_nl_with_zero(unsigned int i, char *s)
+{
+	i = 0;
+	if (s[i] == '\n')
+		s[i] ='\0';
 }
 
 static int	count_lines(char *file)
@@ -81,6 +91,8 @@ char	**parse_map(char *file)
 	lines = count_lines(file);
 	if (lines == 0)
 		return (NULL);
+	if (lines > 600 / 32)
+			return ( err("Map has too many rows\n"), NULL);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (NULL);
@@ -89,12 +101,18 @@ char	**parse_map(char *file)
 		return (NULL);
 	i = 0;
 	while (i < lines)
-		map[i++] = get_next_line(fd);
+	{
+		map[i] = get_next_line(fd);
+		ft_striteri(map[i], &replace_nl_with_zero);
+		i++;
+	}
 	map[i] = NULL;
 	close(fd);
+	if (ft_strlen(map[0]) > 800 / 32) 
+		return (err("Map has too many rows\n"), NULL);
 	if (!check_rectangular(map))
 	{
-		ft_putstr_fd("Error: Map is not rectangular\n", 2);
+		err("Error: Map is not rectangular\n");
 		return (NULL);
 	}
 	return (map);
