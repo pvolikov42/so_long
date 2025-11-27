@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pvolikov <pvolikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,34 +9,31 @@
 /*   Updated: 2025/11/27 20:34:34 by pvolikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdlib.h>
+#include <unistd.h>
 #include <libft.h>
-#include <so_long.h>
-#include <ft_printf.h>
 
-int	main(int argc, char **argv)
+void	err(char *s)
 {
-	char	**map;
-	char	**updmap;
-	t_xenv	env;
-	int		lines;
+	char	*msg;
 
-	if (argc != 2)
-		return (ft_putstr_fd("Usage: ./so_long map.ber\n", 2), 1);
-	map = parse_map(argv[1]);
-	if (!map)
-		return (err("Error loading map\n"), 2);
-	print_map(map);
-	lines = 0;
-	while (map[lines])
-		lines++;
-	ft_printf("Map is: %d x %d\n----\n", lines, ft_strlen(map[0]));
-	updmap = create_updmap(map);
-	if (!updmap)
-		return (err("Error allocating update map\n"), 3);
-	env.map = map;
-	env.updmap = updmap;
-	mlxrun(&env);
-	free_map(map);
-	free_map(updmap);
+	msg = ft_strjoin("ERR: ", s);
+	write(2, msg, ft_strlen(msg));
+	free(msg);
 }
-//https://github.com/crawl/tiles
+
+void	msg(char *s)
+{
+	write(1, s, ft_strlen(s));
+}
+
+int	ft_strlen_nl(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	return (i);
+}
