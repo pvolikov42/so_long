@@ -11,22 +11,13 @@
 /* ************************************************************************** */
 
 #include <mlx.h>
+#include <mlx_int.h>
 #include <unistd.h>
 #include <libft.h>
 #include <ft_printf.h>
 #include <stdlib.h>
 #include <so_long.h>
 #include <sys/time.h>
-
-void	cleanup(t_xenv *env)
-{
-	int	i;
-
-	i = 0;
-	while (i < 5)
-		if (env->im[i])
-			mlx_destroy_image(env->mlx, env->im[i++]);
-}
 
 void	game_quit(t_xenv *env)
 {
@@ -35,7 +26,7 @@ void	game_quit(t_xenv *env)
 	mlx_loop_end(env->mlx);
 }
 
-int	key_win1(int key, void *p)
+int	key_win(int key, void *p)
 {
 	t_xenv	*e;
 
@@ -45,19 +36,37 @@ int	key_win1(int key, void *p)
 		ft_printf("Esc key pressed, bailing out... \n");
 		e->finished = 1;
 	}
-	if (key == 0xFF51)
+	if (key == 0xFF51 || key == 0x61)
 		person_move(e, 1);
-	if (key == 0xFF52)
+	if (key == 0xFF52 || key == 0x77)
 		person_move(e, 2);
-	if (key == 0xFF53)
+	if (key == 0xFF53 || key == 0x64)
 		person_move(e, 3);
-	if (key == 0xFF54)
+	if (key == 0xFF54 || key == 0x73)
 		person_move(e, 4);
 	ft_printf("Steps: %d, score: %d\n", e->stepscnt, e->score);
-	return (0);
+	return (1);
 }
 
-int	loop_win1(void *p)
+int	quit_win_req(void *p)
+{
+	t_xenv	*e;
+
+	e = (t_xenv *)p;
+	e->finished = 1;
+	return (1);
+}
+/*
+int	event_check(void *p)
+{
+	int	n;
+
+	n = *(int *)p;
+	ft_printf("Event happened in window. %d\n", n);
+	return (1);
+}*/
+
+int	loop_proc(void *p)
 {
 	static long		last;
 	long			now;
@@ -75,7 +84,7 @@ int	loop_win1(void *p)
 			game_quit(e);
 	}
 	usleep(10000);
-	return (0);
+	return (1);
 }
 
 int	mlxrun(t_xenv *xenv)
@@ -96,8 +105,9 @@ int	mlxrun(t_xenv *xenv)
 	if (! read_images(xenv))
 		return (0);
 	init_game(xenv);
-	mlx_key_hook(win, key_win1, (void *)xenv);
-	mlx_loop_hook(mlx, loop_win1, (void *)xenv);
+	mlx_key_hook(win, key_win, (void *)xenv);
+	mlx_hook(win, DestroyNotify, 1L << 17, quit_win_req, (void *)xenv);
+	mlx_loop_hook(mlx, loop_proc, (void *)xenv);
 	mlx_loop(mlx);
 	ft_printf("End of loop! \n");
 	cleanup(xenv);

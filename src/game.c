@@ -43,16 +43,16 @@ int	init_person(t_xenv *e)
 	return (0);
 }
 
-static void	dir_helper(int dir, t_coor2d *pos, t_coor2d *npos)
+static void	find_new_pos(int dir, t_coor2d pos, t_coor2d *npos)
 {
 	if (dir == 1)
-		npos->x = pos->x - 1;
+		npos->x = pos.x - 1;
 	if (dir == 2)
-		npos->y = pos->y - 1;
+		npos->y = pos.y - 1;
 	if (dir == 3)
-		npos->x = pos->x + 1;
+		npos->x = pos.x + 1;
 	if (dir == 4)
-		npos->y = pos->y + 1;
+		npos->y = pos.y + 1;
 }
 
 void	person_move(t_xenv *e, int dir)
@@ -64,7 +64,7 @@ void	person_move(t_xenv *e, int dir)
 	pos.x = e->persx;
 	npos.y = pos.y;
 	npos.x = pos.x;
-	dir_helper(dir, &pos, &npos);
+	find_new_pos(dir, pos, &npos);
 	if (e->map[npos.y][npos.x] == 'E')
 		finish_game(e);
 	if (e->map[npos.y][npos.x] == 'C')
