@@ -79,10 +79,10 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HEADERS)
 
 clean :
 	rm -f *.o
-	rm -rf $(OBJ_DIR)
 	for dir in $(LIBS); do $(MAKE) -C $$dir clean; done
 
 fclean : clean
+	rm -rf $(OBJ_DIR)
 	rm -f $(TGT)
 
 re : fclean all
