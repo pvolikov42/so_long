@@ -66,7 +66,8 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HEADERS)
 #	$(CC) $(CFLAGS) -c $@.c -o $@ $< -Llibft -lft
 #	echo bulk_rule: 
 	@mkdir -p $(dir $@)	
-	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS) $(LDLIBS)
+#	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 # libft.a :	$(OBJS)
 #	ar rcs libft.a $(OBJS)
@@ -76,6 +77,14 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HEADERS)
 
 # ($OBJS) : $(INCL)/ft.h
 #	$(CC) -c $(CFLAGS) $< -o $@
+
+show :
+	@echo SRCS: $(SRCS)
+	@echo OBJS: $(OBJS)
+	@echo INCL: $(INCL)
+	@echo CFLAGS: $(CFLAGS)
+	@echo LDFLAGS: $(LDFLAGS)
+	@echo LDLIBS: $(LDLIBS)
 
 clean :
 	rm -f *.o
