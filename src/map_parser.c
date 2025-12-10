@@ -96,5 +96,7 @@ char	**parse_map(char *file)
 	close(fd);
 	if (!check_geometry(map))
 		return (NULL);
+	if (!check_consistency(map))
+		return (NULL);
 	return (map);
 }

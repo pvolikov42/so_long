@@ -65,19 +65,19 @@ void	person_move(t_xenv *e, int dir)
 	npos.y = pos.y;
 	npos.x = pos.x;
 	find_new_pos(dir, pos, &npos);
-	if (e->map[npos.y][npos.x] == 'E')
-		finish_game(e);
-	if (e->map[npos.y][npos.x] == 'C')
-		e->score++;
 	if (e->map[npos.y][npos.x] != '1')
 	{
+		e->stepscnt++;
+		if (e->map[npos.y][npos.x] == 'C')
+			e->score++;
+		if (e->map[npos.y][npos.x] == 'E')
+			finish_game(e);
 		e->map[npos.y][npos.x] = 'P';
 		e->map[pos.y][pos.x] = '0';
 		e->updmap[pos.y][pos.x] = '!';
 		e->updmap[npos.y][npos.x] = '!';
 		e->persy = npos.y;
 		e->persx = npos.x;
-		e->stepscnt++;
 	}
 }
 

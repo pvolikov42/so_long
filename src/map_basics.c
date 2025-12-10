@@ -1,11 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_utils.c                                        :+:      :+:    :+:   */
+/*   map_basics.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pvolikov <pvolikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/06 03:08:05 by pvolikov          #+#    #+#             */
+/*   Created: 2025/12/10 03:08:05 by pvolikov          #+#    #+#             */
 /*   Updated: 2025/11/27 20:34:34 by pvolikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -14,42 +14,48 @@
 #include <libft.h>
 #include <ft_printf.h>
 
-char	**create_updmap(char **map)
+char	**copy_map(char **map)
 {
-	char	**updmap;
+	char	**new;
 	int		i;
 	int		len;
 
 	i = 0;
 	while (map[i])
 		i++;
-	updmap = ft_calloc(i + 1, sizeof(char *));
-	if (!updmap)
+	new = ft_calloc(i + 1, sizeof(char *));
+	if (!new)
 		return (NULL);
 	i = 0;
 	while (map[i])
 	{
 		len = ft_strlen(map[i]);
-		updmap[i] = (char *)malloc(sizeof(char) * (len + 1));
-		if (! updmap[i])
-			return (free_map(updmap), NULL);
-		ft_memset((void *)(updmap[i]), '!', len);
-		updmap[i][len] = '\0';
+		new[i] = ft_strdup(map[i]);
+		if (! new[i])
+			return (free_map(new), NULL);
 		i++;
 	}
-	return (updmap);
+	return (new);
 }
 
-void	fill_map_by_value(char **map, int substrate, int fillval, t_pos pos)
+void	print_map(char **map)
 {
-	int	w;
-	int	h;
-	
-	w = ft_strlen(map[0]);
-	h = ft_strlen(map);
-	if (pos.y >=0 && pos.y < h && pos.x >= 0 && pos.x < w) 
-		map[pos.y][pos.x] = fillval;
-	else
-		return ;
-	//to continue
+	int		i;
+
+	i = 0;
+	while (map[i])
+	{
+		ft_printf("%s\n", map[i]);
+		i++;
+	}
+}
+
+void	free_map(char **map)
+{
+	int	i;
+
+	i = 0;
+	while (map[i])
+		free(map[i++]);
+	free(map);
 }
